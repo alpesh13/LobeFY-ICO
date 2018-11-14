@@ -297,7 +297,7 @@ contract LobefyCrowdsale is Ownable {
     
     function _preValidatePurchase(address investor, uint256 weiAmount, bytes32 messsageHash, bytes signature) internal view {
         require(investor != address(0));
-        require(weiAmount != 0);
+        require(weiAmount >= 0.01 ether);
         address ownerAddress = recover(messsageHash, signature);
         require (ownerAddress == owner);
     }
