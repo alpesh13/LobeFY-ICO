@@ -400,10 +400,7 @@ contract LobefyToken is ERC20, Controller {
     string private _symbol = "LOBY";
     uint8 private _decimals = 18;
     
-    uint256 internal constant initial_supply = 200 * (10 ** 6) * (10 ** 18);  //200M tokens
-
     constructor() public {
-        _mint(msg.sender, initial_supply);
     }
 
     /**
@@ -468,4 +465,5 @@ contract LobefyToken is ERC20, Controller {
     function burn(uint256 value) public {
         _burn(msg.sender, value);
     }
+    
 }
