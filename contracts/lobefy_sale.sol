@@ -117,7 +117,7 @@ contract LobefyCrowdsale is Ownable {
     
     ERC20   private _token;             // The token being sold
     address private _wallet;            // Address where funds are collected
-    uint256 private _rate = 3000;       // How many token units investor gets per wei
+    uint256 private _rate = 2000;       // How many token units investor gets per ether
     uint256 private _weiRaised;         // Amount of wei raised
     uint256 private _tokensSold;        // Amount of tokens sold
     bool    private _paused = false;    // Sale is open by default (use toggle to change)
@@ -125,21 +125,25 @@ contract LobefyCrowdsale is Ownable {
     
     // Statistics
     
-    uint256 private soldPhaseone;
-    uint256 private soldPhaseTwo;
-    uint256 private soldPhaseThree;
+    uint256 private _soldPhaseone;
+    uint256 private _soldPhaseTwo;
+    uint256 private _soldPhaseThree;
+    uint256 private _soldPhaseFour;
   
   
     // Dates
     
     uint256 public phaseOneStart    = now;                //11/05/2018 @ 6:00am (UTC) @ 00:00 am CST
-    uint256 public phaseOneEnd      = phaseOneStart + 15 days;
+    uint256 public phaseOneEnd      = phaseOneStart + 7 days;
     
     uint256 public phaseTwoStart    = phaseOneEnd +1 seconds;
     uint256 public phaseTwoEnd      = phaseTwoStart + 15 days;
     
     uint256 public phaseThreeStart  = phaseTwoEnd + 1 seconds;
     uint256 public phaseThreeEnd    = phaseThreeStart + 15 days;
+    
+    uint256 public phaseFourStart   = phaseThreeEnd + 1 seconds;
+    uint256 public phaseFourEnd     = phaseFourStart + 7 days;
     
     
     // -----------------------------------------
@@ -209,7 +213,7 @@ contract LobefyCrowdsale is Ownable {
     /**
      * @dev fallback function ***DO NOT OVERRIDE***
      */
-    function () external onSaleRunning payable {
+    function () external payable {
         revert();
     }
     
@@ -259,14 +263,17 @@ contract LobefyCrowdsale is Ownable {
      * @return the amount of tokens sold on specific stage
      */
      
-    function _soldPhaseone() public view returns (uint256) {
-        return soldPhaseone;
+    function soldPhaseone() public view returns (uint256) {
+        return _soldPhaseone;
     }
-    function _soldPhaseTwo() public view returns (uint256) {
-        return soldPhaseTwo;
+    function soldPhaseTwo() public view returns (uint256) {
+        return _soldPhaseTwo;
     }
-    function _soldPhaseThree() public view returns (uint256) {
-        return soldPhaseThree;
+    function soldPhaseThree() public view returns (uint256) {
+        return _soldPhaseThree;
+    }
+    function soldPhaseFour() public view returns (uint256) {
+        return _soldPhaseFour;
     }
     
     /**
@@ -297,7 +304,7 @@ contract LobefyCrowdsale is Ownable {
     
     function _preValidatePurchase(address investor, uint256 weiAmount, bytes32 messsageHash, bytes signature) internal view {
         require(investor != address(0));
-        require(weiAmount != 0);
+        require(weiAmount >= 0.01 ether);
         address ownerAddress = recover(messsageHash, signature);
         require (ownerAddress == owner);
     }
@@ -307,16 +314,17 @@ contract LobefyCrowdsale is Ownable {
     function _getTokenAmount(uint256 weiAmount) internal view returns (uint256) {
         uint256 bonusRate;
         if (now >= phaseOneStart && now <=phaseOneEnd) {
-            bonusRate = _rate.mul(2);
+            bonusRate = _rate.add(_rate);                                   // 100% bonus 2xrate
             return weiAmount.mul(bonusRate);
-        }
-            else if (now >= phaseTwoStart && now <=phaseTwoEnd) {
-                bonusRate = _rate.add((_rate.mul(5)).div(10));
+        }   else if (now >= phaseTwoStart && now <=phaseTwoEnd) {
+                bonusRate = _rate.add((_rate.mul(5)).div(10));              // 50% bonus 1.5xrate
                 return weiAmount.mul(bonusRate);
-            }
-                else {
-                    return weiAmount.mul(_rate);
-                }
+            }   else if (now >= phaseThreeStart && now <=phaseThreeEnd) {
+                    bonusRate = _rate.add((_rate.mul(5)).div(20));          // 25% bonus 1.25xrate
+                    return weiAmount.mul(bonusRate);
+                }   else {
+                        return weiAmount.mul(_rate);
+                    }
     }
     
     
@@ -338,11 +346,13 @@ contract LobefyCrowdsale is Ownable {
     
     function _updateStageStates(uint256 tokens) internal{
         if (now >= phaseOneStart && now <=phaseOneEnd) {
-            soldPhaseone = soldPhaseone.add(tokens);
-            }   else if (now >= phaseTwoStart && now <=phaseTwoEnd) {
-                    soldPhaseTwo = soldPhaseTwo.add(tokens);
-                }   else {
-                        soldPhaseThree = soldPhaseThree.add(tokens);
+            _soldPhaseone = _soldPhaseone.add(tokens);
+        }   else if (now >= phaseTwoStart && now <=phaseTwoEnd) {
+                    _soldPhaseTwo = _soldPhaseTwo.add(tokens);
+            }   else if (now >= phaseThreeStart && now <=phaseThreeEnd) {
+                        _soldPhaseThree = _soldPhaseThree.add(tokens);
+                }   else{
+                            _soldPhaseFour = _soldPhaseFour.add(tokens);
                     }
     }
     
