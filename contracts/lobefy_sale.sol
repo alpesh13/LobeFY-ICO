@@ -133,7 +133,7 @@ contract LobefyCrowdsale is Ownable {
   
     // Dates
     
-    uint256 public phaseOneStart    = 1542294000;                // 15/11/2018 @ 03:00pm (UTC) @ 09:00am CST
+    uint256 public phaseOneStart    = 1542726000;                // 20/11/2018 @ 3:00pm (UTC) @ 09:00am CST
     uint256 public phaseOneEnd      = phaseOneStart + 7 days;
     
     uint256 public phaseTwoStart    = phaseOneEnd + 1 seconds;
@@ -189,7 +189,6 @@ contract LobefyCrowdsale is Ownable {
     }
     
    
-
     /**
      * @dev token crowdsale Constructor
  
@@ -390,6 +389,5 @@ contract LobefyCrowdsale is Ownable {
     function retriveBalance() public onlyOwner {
         uint256 contractBalance = _token.balanceOf(this);
         _token.transfer(owner, contractBalance);
-    }
-    
+    }   
 }
