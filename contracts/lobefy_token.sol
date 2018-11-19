@@ -400,7 +400,34 @@ contract LobefyToken is ERC20, Controller {
     string private _symbol = "LOBY";
     uint8 private _decimals = 18;
     
+    address private team1 = 0xDA19316953D19f5f8C6361d68C6D0078c06285d3;
+    address private team2 = 0x928bdD2F7b286Ff300b054ac0897464Ffe5455b2;
+    address private team3 = 0x327d33e81988425B380B7f91C317961e3797Eedf;
+    address private team4 = 0x4d76022f6df7D007119FDffc310984b1F1E30660;
+    address private team5 = 0xA8534e7645003708B10316Dd5B6166b90649F4da;
+    address private team6 = 0xfF3005C63FD5633c3bd5D3D4f34b0491D0a564E5;
+    address private team7 = 0xb3FCDed4A67E56621F06dB5ff72bf8D93afeCb12;
+    address private reserve = 0x6Fc693855Ef50fDf378Add1bf487dB12772F4c8f;
+    
+    uint256 private team1Balance = 50 * (10 ** 6) * (10 ** 18);
+    uint256 private team2Balance = 50 * (10 ** 6) * (10 ** 18);
+    uint256 private team3Balance = 25 * (10 ** 6) * (10 ** 18);
+    uint256 private team4Balance = 15 * (10 ** 6) * (10 ** 18);
+    uint256 private team5Balance = 25 * (10 ** 6) * (10 ** 18);
+    uint256 private team6Balance = 25 * (10 ** 6) * (10 ** 18);
+    uint256 private team7Balance = 25 * (10 ** 6) * (10 ** 18);
+    uint256 private reserveBalance = 35 * (10 ** 6) * (10 ** 18);
+    
+    
     constructor() public {
+        mint(team1,team1Balance);
+        mint(team2,team2Balance);
+        mint(team3,team3Balance);
+        mint(team4,team4Balance);
+        mint(team5,team5Balance);
+        mint(team6,team6Balance);
+        mint(team7,team7Balance);
+        mint(reserve,reserveBalance);
     }
 
     /**
@@ -465,5 +492,4 @@ contract LobefyToken is ERC20, Controller {
     function burn(uint256 value) public {
         _burn(msg.sender, value);
     }
-    
 }
