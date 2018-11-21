@@ -397,7 +397,7 @@ contract LobefyToken is ERC20, Controller {
     using SafeMath for uint256;
     
     string private _name = "Lobefy Token";
-    string private _symbol = "LOBY";
+    string private _symbol = "CRWD";
     uint8 private _decimals = 18;
     
     address private team1 = 0xDA19316953D19f5f8C6361d68C6D0078c06285d3;
