@@ -133,7 +133,7 @@ contract LobefyCrowdsale is Ownable {
   
     // Dates
     
-    uint256 public phaseOneStart    = 1542726000;                // 20/11/2018 @ 3:00pm (UTC) @ 09:00am CST
+    uint256 public phaseOneStart    = 1543600800;                // 11/30/2018 @ 6:00pm (UTC)
     uint256 public phaseOneEnd      = phaseOneStart + 7 days;
     
     uint256 public phaseTwoStart    = phaseOneEnd + 1 seconds;
