@@ -314,15 +314,15 @@ contract LobefyCrowdsale is Ownable {
         if (block.timestamp >= phaseOneStart && block.timestamp <=phaseOneEnd) {
             bonusRate = _rate.add(_rate);                                   // 100% bonus 2xrate
             return weiAmount.mul(bonusRate);
-        }   else if (block.timestamp >= phaseTwoStart && block.timestamp <=phaseTwoEnd) {
-                bonusRate = _rate.add((_rate.mul(5)).div(10));              // 50% bonus 1.5xrate
-                return weiAmount.mul(bonusRate);
-            }   else if (block.timestamp >= phaseThreeStart && block.timestamp<=phaseThreeEnd) {
-                    bonusRate = _rate.add((_rate.mul(5)).div(20));          // 25% bonus 1.25xrate
-                    return weiAmount.mul(bonusRate);
-                }   else {
-                        return weiAmount.mul(_rate);
-                    }
+        } else if (block.timestamp >= phaseTwoStart && block.timestamp <=phaseTwoEnd) {
+            bonusRate = _rate.add((_rate.mul(5)).div(10));              // 50% bonus 1.5xrate
+            return weiAmount.mul(bonusRate);
+        } else if (block.timestamp >= phaseThreeStart && block.timestamp<=phaseThreeEnd) {
+            bonusRate = _rate.add((_rate.mul(5)).div(20));          // 25% bonus 1.25xrate
+            return weiAmount.mul(bonusRate);
+        } else {
+            return weiAmount.mul(_rate);
+        }
     }
     
     
@@ -342,47 +342,47 @@ contract LobefyCrowdsale is Ownable {
     
     // Update statistics
     
-    function _updateStageStates(uint256 tokens) internal{
+    function _updateStageStates(uint256 tokens) internal {
         if (block.timestamp >= phaseOneStart && block.timestamp <=phaseOneEnd) {
             _soldPhaseone = _soldPhaseone.add(tokens);
-        }   else if (block.timestamp >= phaseTwoStart && block.timestamp <=phaseTwoEnd) {
-                    _soldPhaseTwo = _soldPhaseTwo.add(tokens);
-            }   else if (block.timestamp >= phaseThreeStart && block.timestamp <=phaseThreeEnd) {
-                        _soldPhaseThree = _soldPhaseThree.add(tokens);
-                }   else{
-                            _soldPhaseFour = _soldPhaseFour.add(tokens);
-                    }
+        } else if (block.timestamp >= phaseTwoStart && block.timestamp <=phaseTwoEnd) {
+            _soldPhaseTwo = _soldPhaseTwo.add(tokens);
+        } else if (block.timestamp >= phaseThreeStart && block.timestamp <=phaseThreeEnd) {
+            _soldPhaseThree = _soldPhaseThree.add(tokens);
+        } else {
+            _soldPhaseFour = _soldPhaseFour.add(tokens);
+        }
     }
     
     
     function recover(bytes32 hash, bytes sig) public pure returns (address) {
-      bytes32 r;
-      bytes32 s;
-      uint8 v;
+        bytes32 r;
+        bytes32 s;
+        uint8 v;
 
-      //Check the signature length
-      if (sig.length != 65) {
-        return (address(0));
-      }
+        //Check the signature length
+        if (sig.length != 65) {
+            return (address(0));
+        }
 
-      // Divide the signature in r, s and v variables
-      assembly {
-        r := mload(add(sig, 32))
-        s := mload(add(sig, 64))
-        v := byte(0, mload(add(sig, 96)))
-      }
+        // Divide the signature in r, s and v variables
+        assembly {
+            r := mload(add(sig, 32))
+            s := mload(add(sig, 64))
+            v := byte(0, mload(add(sig, 96)))
+        }
 
-      // Version of signature should be 27 or 28, but 0 and 1 are also possible versions
-      if (v < 27) {
-        v += 27;
-      }
+        // Version of signature should be 27 or 28, but 0 and 1 are also possible versions
+        if (v < 27) {
+            v += 27;
+        }
 
-      // If the version is correct return the signer address
-      if (v != 27 && v != 28) {
-        return (address(0));
-      } else {
-        return ecrecover(hash, v, r, s);
-      }
+        // If the version is correct return the signer address
+        if (v != 27 && v != 28) {
+            return (address(0));
+        } else {
+            return ecrecover(hash, v, r, s);
+        }
     }
     
     
