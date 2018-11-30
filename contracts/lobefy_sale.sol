@@ -328,7 +328,7 @@ contract LobefyCrowdsale is Ownable {
     
     // Token transfer
 
-    function _processPurchase(address investor, uint256 tokenAmount) public {
+    function _processPurchase(address investor, uint256 tokenAmount) internal {
         _token.transfer(investor, tokenAmount);
     }
     
